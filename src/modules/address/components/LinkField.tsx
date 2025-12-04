@@ -1,3 +1,4 @@
+import { getRecordValue } from "@/utils/record-access";
 import { TextField, useRecordContext } from "react-admin";
 
 interface Props {
@@ -9,15 +10,12 @@ interface Props {
 
 export const LinkField = ({ source, base_url, label, sortBy }: Props) => {
   const record = useRecordContext();
+  const value = record ? getRecordValue(record, source) : null;
 
-  if (!record) return null;
+  if (!value) return <span>-</span>;
 
   return (
-    <a
-      href={`${base_url}/${record[source]}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <a href={`${base_url}/${value}`} target="_blank" rel="noopener noreferrer">
       <TextField source={source} label={label} sortBy={sortBy} />
     </a>
   );

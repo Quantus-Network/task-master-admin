@@ -1,13 +1,20 @@
-import { ETHERSCAN_BASE_URL, X_BASE_URL } from "@/constants/env-variables";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  ETHERSCAN_BASE_URL,
+  QUBE_BASE_URL,
+  X_BASE_URL,
+} from "@/constants/env-variables";
 import {
   List,
   TextField,
-  BooleanField,
   Datagrid,
   BooleanInput,
   SearchInput,
+  FunctionField,
+  ChipField,
 } from "react-admin";
 import { LinkField } from "./components/LinkField";
+import { ShortAddressField } from "./components/ShortAddressField";
 
 export const AddressList = () => {
   const postFilters = [
@@ -20,33 +27,51 @@ export const AddressList = () => {
   return (
     <List filters={postFilters}>
       <Datagrid rowClick={false}>
-        <TextField
+        <ShortAddressField
           source="address.quan_address"
+          base_url={`${QUBE_BASE_URL}/accounts`}
           label="Address"
           sortBy="address"
         />
+
         <TextField
           source="address.referral_code"
           label="Referral Code"
           sortBy="referral_code"
         />
+
         <TextField
           source="address.referrals_count"
           label="Referrals Count"
           sortBy="referrals_count"
         />
-        <BooleanField source="is_opted_in" label="Reward Program Participant" />
-        <TextField source="opt_in_number" label="Participant Number" />
-        <LinkField
+
+        <FunctionField
+          label="Reward Program"
+          sortBy="is_opted_in"
+          render={(record: any) => (
+            <ChipField
+              source="is_opted_in"
+              record={{
+                is_opted_in: record.is_opted_in ? "Active" : "Inactive",
+              }}
+              color={record.is_opted_in ? "success" : "error"}
+              size="small"
+              variant="outlined"
+            />
+          )}
+        />
+
+        <ShortAddressField
           source="eth_address"
           label="ETH Address"
           base_url={`${ETHERSCAN_BASE_URL}/address`}
         />
+
         <LinkField
           source="x_username"
           label="X Username"
           base_url={X_BASE_URL}
-          sortBy=""
         />
       </Datagrid>
     </List>
