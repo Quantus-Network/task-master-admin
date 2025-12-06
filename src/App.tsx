@@ -10,6 +10,7 @@ import Layout from "@/layout/layout";
 
 import address from "@/modules/address";
 import tweet from "@/modules/tweet";
+import tweetAuthors from "@/modules/tweet-author";
 
 export const App = () => {
   const [isAuthHydated, setIsAuthHydated] = useState(false);
@@ -36,6 +37,7 @@ export const App = () => {
     >
       <Resource name={ResourcePack.Addresses} {...address} />
       <Resource name={ResourcePack.Tweets} {...tweet} />
+      <Resource name={ResourcePack.TweetAuthors} {...tweetAuthors} />
     </Admin>
   );
 };

@@ -36,10 +36,20 @@ export const baseDataProvider: DataProvider = {
   getList: async (resource, params) => {
     const { page, perPage } = params.pagination || { page: 1, perPage: 10 };
 
-    // React Admin often defaults to 'id', but your Rust enum expects 'created_at', 'referrals_count', etc.
-    // We map 'id' to 'created_at' to prevent backend errors if no sort is specified.
+    // React Admin often defaults to 'id', but backend expect others.
+    // We map 'id' to  prevent backend errors if no sort is specified.
     const { field, order } = params.sort || {};
-    const sortField = field === "id" ? "created_at" : field;
+    let sortField: string | undefined;
+    if (
+      field === "id" &&
+      [ResourcePack.Addresses, ResourcePack.Tweets].includes(
+        resource as ResourcePack,
+      )
+    )
+      sortField = "created_at";
+    else if (field === "id" && resource === ResourcePack.TweetAuthors)
+      sortField = "username";
+    else sortField = field;
 
     // 'q' is React Admin's standard convention for the main search bar.
     // We map 'q' -> 'search' for the backend.

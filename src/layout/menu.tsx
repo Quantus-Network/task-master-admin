@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { People, Twitter } from "@mui/icons-material";
+import { Inbox, People, Twitter } from "@mui/icons-material";
 
 import { MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
@@ -23,7 +23,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         to="/addresses"
         state={{ _scrollToTop: true }}
         primaryText="Addresses"
-        leftIcon={<People />}
+        leftIcon={<Inbox />}
         dense={dense}
       />
 
@@ -32,6 +32,14 @@ const Menu = ({ dense = false }: MenuProps) => {
         state={{ _scrollToTop: true }}
         primaryText="Tweets"
         leftIcon={<Twitter />}
+        dense={dense}
+      />
+
+      <MenuItemLink
+        to="/tweet-authors"
+        state={{ _scrollToTop: true }}
+        primaryText="Tweet Authors"
+        leftIcon={<People />}
         dense={dense}
       />
     </Box>
