@@ -9,6 +9,7 @@ import { ResourcePack } from "@/lib/resources";
 import Layout from "@/layout/layout";
 
 import address from "@/modules/address";
+import tweet from "@/modules/tweet";
 
 export const App = () => {
   const [isAuthHydated, setIsAuthHydated] = useState(false);
@@ -34,6 +35,7 @@ export const App = () => {
       theme={defaultDarkTheme}
     >
       <Resource name={ResourcePack.Addresses} {...address} />
+      <Resource name={ResourcePack.Tweets} {...tweet} />
     </Admin>
   );
 };

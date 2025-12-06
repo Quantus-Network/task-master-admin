@@ -13,8 +13,8 @@ import {
   FunctionField,
   ChipField,
 } from "react-admin";
-import { LinkField } from "./components/LinkField";
-import { ShortAddressField } from "./components/ShortAddressField";
+import { LinkField } from "../shared/components/LinkField";
+import { ShortAddressField } from "../shared/components/ShortAddressField";
 
 export const AddressList = () => {
   const postFilters = [
