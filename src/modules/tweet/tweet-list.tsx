@@ -3,10 +3,12 @@ import {
   List,
   TextField,
   Datagrid,
-  BooleanInput,
   SearchInput,
   DateField,
   FunctionField,
+  TextInput,
+  NumberInput,
+  DateInput,
 } from "react-admin";
 import { LinkField } from "../shared/components/LinkField";
 import { X_BASE_URL } from "@/constants/env-variables";
@@ -14,9 +16,23 @@ import { X_BASE_URL } from "@/constants/env-variables";
 export const TweetList = () => {
   const postFilters = [
     <SearchInput key={0} source="q" alwaysOn placeholder="Keyword" />,
-    <BooleanInput key={1} source="is_opted_in" label="Opted In?" />,
-    <BooleanInput key={2} source="has_eth_address" label="Has ETH?" />,
-    <BooleanInput key={3} source="has_x_account" label="Has X?" />,
+    <TextInput
+      key={1}
+      source="author_username"
+      label="Author"
+      placeholder="Username e.g YuviLightman"
+    />,
+    <NumberInput key={2} source="min_likes" label="Min likes" />,
+    <NumberInput key={3} source="min_impressions" label="Min impressions" />,
+    <DateInput
+      key={4}
+      source="created_after"
+      label="Created At/After"
+      parse={(date) => {
+        if (!date) return;
+        return new Date(date).toISOString();
+      }}
+    />,
   ];
 
   return (
