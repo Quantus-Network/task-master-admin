@@ -17,7 +17,7 @@ import { LinkField } from "../shared/components/LinkField";
 import { ShortAddressField } from "../shared/components/ShortAddressField";
 
 export const AddressList = () => {
-  const postFilters = [
+  const filters = [
     <SearchInput key={0} source="q" alwaysOn placeholder="Keyword" />,
     <BooleanInput key={1} source="is_opted_in" label="Opted In?" />,
     <BooleanInput key={2} source="has_eth_address" label="Has ETH?" />,
@@ -25,7 +25,7 @@ export const AddressList = () => {
   ];
 
   return (
-    <List filters={postFilters}>
+    <List filters={filters}>
       <Datagrid rowClick={false}>
         <ShortAddressField
           source="address.quan_address"

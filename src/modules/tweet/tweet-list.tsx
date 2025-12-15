@@ -14,7 +14,7 @@ import { LinkField } from "../shared/components/LinkField";
 import { X_BASE_URL } from "@/constants/env-variables";
 
 export const TweetList = () => {
-  const postFilters = [
+  const filters = [
     <SearchInput key={0} source="q" alwaysOn placeholder="Keyword" />,
     <TextInput
       key={1}
@@ -36,7 +36,7 @@ export const TweetList = () => {
   ];
 
   return (
-    <List filters={postFilters}>
+    <List filters={filters}>
       <Datagrid rowClick={false}>
         <FunctionField
           label="Tweet Id"

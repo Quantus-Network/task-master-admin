@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -62,3 +63,11 @@ export const signOut = () => _useAuth.getState().signOut();
 export const signIn = (admin: Admin, accessToken: string) =>
   _useAuth.getState().signIn(admin, accessToken);
 export const hydrateAuth = async () => _useAuth.getState().hydrate();
+
+export const getAccessTokenOptions = (options: any = {}) => {
+  const token = authStore.getState().accessToken;
+  return {
+    ...options,
+    accessToken: token || undefined,
+  };
+};

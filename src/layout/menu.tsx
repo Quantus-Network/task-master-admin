@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Inbox, People, Twitter } from "@mui/icons-material";
+import { Assignment, Inbox, People, Twitter } from "@mui/icons-material";
 
 import { MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
@@ -40,6 +40,14 @@ const Menu = ({ dense = false }: MenuProps) => {
         state={{ _scrollToTop: true }}
         primaryText="Tweet Authors"
         leftIcon={<People />}
+        dense={dense}
+      />
+
+      <MenuItemLink
+        to="/raid-quests"
+        state={{ _scrollToTop: true }}
+        primaryText="Raid Quests"
+        leftIcon={<Assignment />}
         dense={dense}
       />
     </Box>

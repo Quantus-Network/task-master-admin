@@ -2,16 +2,8 @@
 import { DataProvider } from "react-admin";
 import { httpClient } from "@/lib/http-client";
 import extractErrMsg from "@/utils/extract-error-msg";
-import { authStore } from "@/lib/auth";
+import { getAccessTokenOptions } from "@/lib/auth";
 import { ResourcePack } from "@/lib/resources";
-
-const getOptions = (options: any = {}) => {
-  const token = authStore.getState().accessToken;
-  return {
-    ...options,
-    accessToken: token || undefined,
-  };
-};
 
 const getRecordId = (resource: string, item: any) => {
   if (resource === ResourcePack.Addresses) return item.address.quan_address;
@@ -24,7 +16,11 @@ export const baseDataProvider: DataProvider = {
     const url = `/${resource}`;
 
     try {
-      const { json } = await httpClient.post(url, params.data, getOptions());
+      const { json } = await httpClient.post(
+        url,
+        params.data,
+        getAccessTokenOptions(),
+      );
       return { data: { ...json, id: json.data } };
     } catch (error) {
       const errMsg = extractErrMsg(error);
@@ -42,9 +38,11 @@ export const baseDataProvider: DataProvider = {
     let sortField: string | undefined;
     if (
       field === "id" &&
-      [ResourcePack.Addresses, ResourcePack.Tweets].includes(
-        resource as ResourcePack,
-      )
+      [
+        ResourcePack.Addresses,
+        ResourcePack.Tweets,
+        ResourcePack.RaidQuests,
+      ].includes(resource as ResourcePack)
     )
       sortField = "created_at";
     else if (field === "id" && resource === ResourcePack.TweetAuthors)
@@ -76,7 +74,7 @@ export const baseDataProvider: DataProvider = {
 
     const { json } = await httpClient.get(
       path,
-      getOptions({ signal: params.signal }),
+      getAccessTokenOptions({ signal: params.signal }),
     );
 
     return {
@@ -97,7 +95,7 @@ export const baseDataProvider: DataProvider = {
     const path = `/${resource}/${params.id}`;
     const { json } = await httpClient.get(
       path,
-      getOptions({ signal: params.signal }),
+      getAccessTokenOptions({ signal: params.signal }),
     );
 
     const originId = json.data.address.quan_address;
@@ -114,7 +112,7 @@ export const baseDataProvider: DataProvider = {
     const path = `/${resource}`;
     const { json } = await httpClient.get(
       path,
-      getOptions({ signal: params.signal }),
+      getAccessTokenOptions({ signal: params.signal }),
     );
 
     return {
@@ -128,7 +126,7 @@ export const baseDataProvider: DataProvider = {
     const path = `/${resource}`;
     const { json } = await httpClient.get(
       path,
-      getOptions({ signal: params.signal }),
+      getAccessTokenOptions({ signal: params.signal }),
     );
 
     return {
@@ -139,22 +137,30 @@ export const baseDataProvider: DataProvider = {
 
   update: async (resource, params) => {
     const path = `/${resource}/${params.id}`;
-    const { json } = await httpClient.put(path, params.data, getOptions());
+    const { json } = await httpClient.put(
+      path,
+      params.data,
+      getAccessTokenOptions(),
+    );
     return { data: { id: params.id, ...json } };
   },
 
   updateMany: async (resource, params) => {
     const path = `/${resource}`;
-    const { json } = await httpClient.put(path, params.data, getOptions());
+    const { json } = await httpClient.put(
+      path,
+      params.data,
+      getAccessTokenOptions(),
+    );
     return { data: json };
   },
 
   delete: async (resource, params) => {
-    const path = `/${resource}`;
+    const path = `/${resource}/${params.id}`;
     const { json } = await httpClient.delete(
       path,
-      { ids: [params.id] },
-      getOptions(),
+      null,
+      getAccessTokenOptions(),
     );
     return { data: json };
   },
@@ -164,7 +170,7 @@ export const baseDataProvider: DataProvider = {
     const { json } = await httpClient.delete(
       path,
       { ids: params.ids },
-      getOptions(),
+      getAccessTokenOptions(),
     );
     return { data: json.data };
   },
