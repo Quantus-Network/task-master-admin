@@ -9,6 +9,10 @@ import {
 } from "react-admin";
 import { LinkField } from "../shared/components/LinkField";
 import { X_BASE_URL } from "@/constants/env-variables";
+import {
+  IgnoreTweetAuthorButton,
+  WatchTweetAuthorButton,
+} from "./tweet-author-buttons";
 
 export const TweetAuthorList = () => {
   const filters = [
@@ -27,6 +31,9 @@ export const TweetAuthorList = () => {
         <TextField source="like_count" label="Likes" />
 
         <DateField source="fetched_at" label="Fetched At" sortable={false} />
+
+        <WatchTweetAuthorButton />
+        <IgnoreTweetAuthorButton />
       </Datagrid>
     </List>
   );
