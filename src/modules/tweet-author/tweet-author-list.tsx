@@ -1,18 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   List,
-  TextField,
   Datagrid,
   SearchInput,
   DateField,
   NumberInput,
+  FunctionField,
+  ChipField,
+  WrapperField,
 } from "react-admin";
 import { LinkField } from "../shared/components/LinkField";
 import { X_BASE_URL } from "@/constants/env-variables";
-import {
-  IgnoreTweetAuthorButton,
-  WatchTweetAuthorButton,
-} from "./tweet-author-buttons";
+import { TweetAuthorStatusToggle } from "./tweet-author-buttons";
 
 export const TweetAuthorList = () => {
   const filters = [
@@ -26,14 +24,48 @@ export const TweetAuthorList = () => {
       <Datagrid rowClick={false}>
         <LinkField source="username" label="Username" base_url={X_BASE_URL} />
 
-        <TextField source="followers_count" label="Followers" />
+        <FunctionField
+          source="followers_count"
+          label="Followers"
+          render={(record: { followers_count: number }) =>
+            new Intl.NumberFormat("en-US", {
+              notation: "compact",
+              maximumFractionDigits: 1,
+            }).format(record.followers_count)
+          }
+        />
 
-        <TextField source="like_count" label="Likes" />
+        <FunctionField
+          source="like_count"
+          label="Likes"
+          render={(record: { like_count: number }) =>
+            new Intl.NumberFormat("en-US", {
+              notation: "compact",
+              maximumFractionDigits: 1,
+            }).format(record.like_count)
+          }
+        />
 
         <DateField source="fetched_at" label="Fetched At" sortable={false} />
 
-        <WatchTweetAuthorButton />
-        <IgnoreTweetAuthorButton />
+        <FunctionField
+          label="Status"
+          render={(record: { is_ignored: boolean }) => (
+            <ChipField
+              source="is_ignored"
+              record={{
+                is_ignored: record.is_ignored ? "Ignored" : "Watched",
+              }}
+              color={record.is_ignored ? "error" : "success"}
+              size="small"
+              variant="outlined"
+            />
+          )}
+        />
+
+        <WrapperField label="Action">
+          <TweetAuthorStatusToggle />
+        </WrapperField>
       </Datagrid>
     </List>
   );

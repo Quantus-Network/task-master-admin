@@ -58,28 +58,52 @@ export const TweetList = () => {
 
         <TextField source="tweet.text" label="Text" sortable={false} />
 
-        <TextField
+        <FunctionField
           source="tweet.impression_count"
           label="Impressions"
           sortBy="impression_count"
+          render={(record: any) =>
+            new Intl.NumberFormat("en-US", {
+              notation: "compact",
+              maximumFractionDigits: 1,
+            }).format(record.tweet.impression_count)
+          }
         />
 
-        <TextField
+        <FunctionField
           source="tweet.reply_count"
           label="Replies"
           sortBy="reply_count"
+          render={(record: any) =>
+            new Intl.NumberFormat("en-US", {
+              notation: "compact",
+              maximumFractionDigits: 1,
+            }).format(record.tweet.reply_count)
+          }
         />
 
-        <TextField
+        <FunctionField
           source="tweet.retweet_count"
           label="Retweets"
           sortBy="retweet_count"
+          render={(record: any) =>
+            new Intl.NumberFormat("en-US", {
+              notation: "compact",
+              maximumFractionDigits: 1,
+            }).format(record.tweet.retweet_count)
+          }
         />
 
-        <TextField
+        <FunctionField
           source="tweet.like_count"
           label="Likes"
           sortBy="like_count"
+          render={(record: any) =>
+            new Intl.NumberFormat("en-US", {
+              notation: "compact",
+              maximumFractionDigits: 1,
+            }).format(record.tweet.like_count)
+          }
         />
 
         <DateField

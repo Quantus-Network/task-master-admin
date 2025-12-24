@@ -3,62 +3,46 @@ import { httpClient } from "@/lib/http-client";
 import { getAccessTokenOptions } from "@/lib/auth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useState } from "react";
+import extractErrMsg from "@/utils/extract-error-msg";
 
-export const WatchTweetAuthorButton = () => {
+export const TweetAuthorStatusToggle = () => {
   const record = useRecordContext();
   const notify = useNotify();
   const refresh = useRefresh();
+  const [loading, setLoading] = useState(false);
 
-  const handleClick = async (e: React.MouseEvent) => {
+  if (!record) return null;
+
+  const handleToggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!record) return;
-
+    setLoading(true);
     try {
-      await httpClient.put(
-        `/tweet-authors/${record.id}/watch`,
-        {},
-        getAccessTokenOptions(),
-      );
-      notify("Author watched", { type: "success" });
+      const endpoint = record.is_ignored
+        ? `/tweet-authors/${record.id}/watch`
+        : `/tweet-authors/${record.id}/ignore`;
+
+      await httpClient.put(endpoint, {}, getAccessTokenOptions());
+      notify(record.is_ignored ? "Author watched" : "Author ignored", {
+        type: "success",
+      });
       refresh();
     } catch (error) {
-      notify("Error watching author", { type: "error" });
+      const errMsg = extractErrMsg(error);
+      notify(errMsg, { type: "error" });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Button label="Watch" onClick={handleClick} color="primary">
-      <VisibilityIcon />
+    <Button
+      onClick={handleToggle}
+      color={record.is_ignored ? "primary" : "warning"}
+      label={record.is_ignored ? "Watch" : "Ignore"}
+      disabled={loading}
+    >
+      {record.is_ignored ? <VisibilityIcon /> : <VisibilityOffIcon />}
     </Button>
   );
 };
-
-export const IgnoreTweetAuthorButton = () => {
-  const record = useRecordContext();
-  const notify = useNotify();
-  const refresh = useRefresh();
-
-  const handleClick = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!record) return;
-
-    try {
-      await httpClient.put(
-        `/tweet-authors/${record.id}/ignore`,
-        {},
-        getAccessTokenOptions(),
-      );
-      notify("Author ignored", { type: "info" });
-      refresh();
-    } catch (error) {
-      notify("Error ignoring author", { type: "error" });
-    }
-  };
-
-  return (
-    <Button label="Ignore" onClick={handleClick} color="warning">
-      <VisibilityOffIcon />
-    </Button>
-  );
-};
-
